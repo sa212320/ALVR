@@ -27,7 +27,7 @@ enum ALVR_PACKET_TYPE {
 };
 
 enum {
-	ALVR_PROTOCOL_VERSION = 20
+	ALVR_PROTOCOL_VERSION = 21
 };
 
 enum ALVR_CODEC {
@@ -260,7 +260,7 @@ struct TimeSync {
 };
 struct ChangeSettings {
 	uint32_t type; // 8
-	uint32_t enableTestMode;
+	uint64_t debugFlags;
 	uint32_t suspend;
 	uint32_t frameQueueSize;
 };

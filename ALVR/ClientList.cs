@@ -15,9 +15,9 @@ namespace ALVR
         List<DeviceDescriptor> clients = new List<DeviceDescriptor>();
         public bool EnableAutoConnect { get; set; } = true;
 
-        public ClientList(string serialized)
+        public ClientList(string serialized, Action detectedWrongVersionCallback)
         {
-            helloListener = new HelloListener(NewClientCallback);
+            helloListener = new HelloListener(NewClientCallback, detectedWrongVersionCallback);
             try
             {
                 var json = DynamicJson.Parse(serialized);
@@ -134,6 +134,19 @@ namespace ALVR
                         clients[i].Online = false;
                     }
                 }
+            }
+        }
+
+        /// <summary>
+        /// Clear clients to prevent immediate re-connection after disconnect.
+        /// </summary>
+        public void Clear()
+        {
+            clients.Clear();
+            foreach (var c in autoConnectList)
+            {
+                c.Online = false;
+                clients.Add(c);
             }
         }
 

@@ -727,6 +727,7 @@ public:
 	CRemoteHmd(std::shared_ptr<Listener> listener)
 		: m_unObjectId(vr::k_unTrackedDeviceIndexInvalid)
 		, m_added(false)
+		, mActivated(false)
 		, m_Listener(listener)
 	{
 		m_unObjectId = vr::k_unTrackedDeviceIndexInvalid;
@@ -788,7 +789,7 @@ public:
 		m_recenterManager.reset();
 	}
 
-	std::string GetSerialNumber() const { return Settings::Instance().m_sSerialNumber; }
+	std::string GetSerialNumber() const { return Settings::Instance().mSerialNumber; }
 	
 	void Enable()
 	{
@@ -820,8 +821,10 @@ public:
 		m_unObjectId = unObjectId;
 		m_ulPropertyContainer = vr::VRProperties()->TrackedDeviceToPropertyContainer(m_unObjectId);
 
-		vr::VRProperties()->SetStringProperty(m_ulPropertyContainer, vr::Prop_ModelNumber_String, Settings::Instance().m_sModelNumber.c_str());
-		vr::VRProperties()->SetStringProperty(m_ulPropertyContainer, vr::Prop_RenderModelName_String, Settings::Instance().m_sModelNumber.c_str());
+		vr::VRProperties()->SetStringProperty(m_ulPropertyContainer, vr::Prop_TrackingSystemName_String, Settings::Instance().mTrackingSystemName.c_str());
+		vr::VRProperties()->SetStringProperty(m_ulPropertyContainer, vr::Prop_ModelNumber_String, Settings::Instance().mModelNumber.c_str());
+		vr::VRProperties()->SetStringProperty(m_ulPropertyContainer, vr::Prop_ManufacturerName_String, Settings::Instance().mManufacturerName.c_str());
+		vr::VRProperties()->SetStringProperty(m_ulPropertyContainer, vr::Prop_RenderModelName_String, Settings::Instance().mRenderModelName.c_str());
 		vr::VRProperties()->SetFloatProperty(m_ulPropertyContainer, vr::Prop_UserIpdMeters_Float, Settings::Instance().m_flIPD);
 		vr::VRProperties()->SetFloatProperty(m_ulPropertyContainer, vr::Prop_UserHeadToEyeDepthMeters_Float, 0.f);
 		vr::VRProperties()->SetFloatProperty(m_ulPropertyContainer, vr::Prop_DisplayFrequency_Float, static_cast<float>(Settings::Instance().m_refreshRate));
@@ -891,12 +894,15 @@ public:
 		m_displayComponent = std::make_shared<DisplayComponent>();
 		m_directModeComponent = std::make_shared<DirectModeComponent>(m_D3DRender, m_encoder, m_Listener, m_recenterManager);
 
+		mActivated = true;
+
 		return vr::VRInitError_None;
 	}
 
 	virtual void Deactivate() override
 	{
 		Log(L"CRemoteHmd Deactivate");
+		mActivated = false;
 		m_unObjectId = vr::k_unTrackedDeviceIndexInvalid;
 	}
 
@@ -1098,6 +1104,9 @@ public:
 			if (!m_Listener->HasValidTrackingInfo()) {
 				return;
 			}
+			if (!m_added || !mActivated) {
+				return;
+			}
 
 			TrackingInfo info;
 			m_Listener->GetTrackingInfo(info);
@@ -1117,21 +1126,33 @@ public:
 	}
 
 	void OnStreamStart() {
+		if (!m_added || !mActivated) {
+			return;
+		}
+		Log(L"OnStreamStart()");
 		// Insert IDR frame for faster startup of decoding.
 		m_encoder->OnStreamStart();
 	}
 
 	void OnPacketLoss() {
+		if (!m_added || !mActivated) {
+			return;
+		}
+		Log(L"OnPacketLoss()");
 		m_encoder->OnPacketLoss();
 	}
 
 	void OnShutdown() {
+		if (!m_added || !mActivated) {
+			return;
+		}
 		Log(L"Sending shutdown signal to vrserver.");
 		vr::VREvent_Reserved_t data = { 0, 0 };
 		vr::VRServerDriverHost()->VendorSpecificEvent(m_unObjectId, vr::VREvent_DriverRequestedQuit, (vr::VREvent_Data_t&)data, 0);
 	}
 private:
 	bool m_added;
+	bool mActivated;
 	vr::TrackedDeviceIndex_t m_unObjectId;
 	vr::PropertyContainerHandle_t m_ulPropertyContainer;
 

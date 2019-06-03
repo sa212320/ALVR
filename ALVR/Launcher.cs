@@ -24,6 +24,7 @@ namespace ALVR
         ControlSocket socket = new ControlSocket();
         ServerConfig config = new ServerConfig();
         ClientList clientList;
+        ClientSocket clientSocket;
         DeviceDescriptor currentClient;
         List<DeviceQuery.SoundDevice> soundDevices = new List<DeviceQuery.SoundDevice>();
         int defaultSoundDeviceIndex = 0;
@@ -38,6 +39,7 @@ namespace ALVR
 
         public Launcher()
         {
+            clientSocket = new ClientSocket(OnClientMessageStartServer, OnClientConnectionClosed);
             InitializeComponent();
         }
 
@@ -92,9 +94,18 @@ namespace ALVR
             // Driver check
             //
 
-            DriverInstaller.CheckDriverPath();
-            DriverInstaller.RemoveOtherDriverInstallations();
-            CheckDriverInstallStatus();
+            try
+            {
+                DriverInstaller.CheckDriverPath();
+                DriverInstaller.RemoveOtherDriverInstallations();
+                CheckDriverInstallStatus();
+            }
+            catch (Exception e2)
+            {
+                MessageBox.Show("No SteamVR installation found. Please check installation of SteamVR.\r\n" +
+                    e2.Message, "ALVR Fatal Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Application.Exit();
+            }
 
             //
             // Open server tab
@@ -164,7 +175,7 @@ namespace ALVR
                     soundDeviceComboBox.SelectedIndex = 0;
                 }
 
-                clientList = new ClientList(Properties.Settings.Default.autoConnectList);
+                clientList = new ClientList(Properties.Settings.Default.autoConnectList, OnWrongVersionDetected);
             }
             finally
             {
@@ -461,6 +472,8 @@ namespace ALVR
             }
             currentClient = client;
 
+            var task = clientSocket.Connect(currentClient.ClientHost, currentClient.ClientPort);
+
             connectedLabel.Text = "Connected!\r\n\r\n" + currentClient.DeviceName + "\r\n"
                 + currentClient.ClientAddr.ToString() + "\r\n"
                 + currentClient.RefreshRates[0] + "Hz " + currentClient.DefaultWidth + "x" + currentClient.DefaultHeight;
@@ -604,14 +617,14 @@ namespace ALVR
             bitrateLabel.Text = bitrateTrackBar.Value + "Mbps";
         }
 
-        async private void button2_Click(object sender, EventArgs e)
+        async private void sendClientDebugFlagsButton_Click(object sender, EventArgs e)
         {
-            await socket.SendCommand("EnableTestMode " + metroTextBox1.Text);
+            await socket.SendCommand("SetDebugFlags " + clientDebugFlagsTextBox.Text);
         }
 
         async private void button3_Click(object sender, EventArgs e)
         {
-            await socket.SendCommand("EnableDriverTestMode " + metroTextBox2.Text);
+            await socket.SendCommand("EnableDriverTestMode " + driverTestModeTextBox.Text);
         }
 
         async private void metroButton4_Click(object sender, EventArgs e)
@@ -684,10 +697,11 @@ namespace ALVR
             await socket.SendCommand("SetConfig controllerRecenterButton " + ServerConfig.recenterButtonIndex[value]);
         }
 
-        async private void disconnectButton_Click(object sender, EventArgs e)
+        private void disconnectButton_Click(object sender, EventArgs e)
         {
             // Disable auto connect to avoid immediate auto reconnection.
             clientList.EnableAutoConnect = false;
+            Task t = clientSocket.Disconnect();
             currentClient = null;
             ShowFindingPanel();
             socket.Shutdown();
@@ -793,6 +807,28 @@ namespace ALVR
             }
             resolutionLabel.Text = (width * ServerConfig.supportedScales[resolutionComboBox.SelectedIndex] / 100)
                 + "x" + (height * ServerConfig.supportedScales[resolutionComboBox.SelectedIndex] / 100);
+        }
+
+        // Callbacks for ClientSocket
+
+        private void OnClientMessageStartServer()
+        {
+            LaunchServer();
+        }
+
+        private void OnClientConnectionClosed()
+        {
+            currentClient = null;
+
+            clientList.Clear();
+
+            ShowFindingPanel();
+            UpdateServerStatus();
+        }
+
+        private void OnWrongVersionDetected()
+        {
+            wrongVersionLabel.Visible = true;
         }
     }
 }

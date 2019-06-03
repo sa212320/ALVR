@@ -37,8 +37,8 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Launcher));
-            this.metroButton1 = new MetroFramework.Controls.MetroButton();
-            this.metroButton2 = new MetroFramework.Controls.MetroButton();
+            this.sendClientDebugFlagsButton = new MetroFramework.Controls.MetroButton();
+            this.sendDriverTestModeButton = new MetroFramework.Controls.MetroButton();
             this.metroProgressSpinner1 = new MetroFramework.Controls.MetroProgressSpinner();
             this.captureComposedDDSButton = new MetroFramework.Controls.MetroButton();
             this.metroTabControl1 = new MetroFramework.Controls.MetroTabControl();
@@ -130,8 +130,8 @@
             this.debugCaptureOutputCheckBox = new MetroFramework.Controls.MetroCheckBox();
             this.debugLogCheckBox = new MetroFramework.Controls.MetroCheckBox();
             this.metroCheckBox1 = new MetroFramework.Controls.MetroCheckBox();
-            this.metroTextBox2 = new MetroFramework.Controls.MetroTextBox();
-            this.metroTextBox1 = new MetroFramework.Controls.MetroTextBox();
+            this.driverTestModeTextBox = new MetroFramework.Controls.MetroTextBox();
+            this.clientDebugFlagsTextBox = new MetroFramework.Controls.MetroTextBox();
             this.metroLabel2 = new MetroFramework.Controls.MetroLabel();
             this.metroLabel1 = new MetroFramework.Controls.MetroLabel();
             this.metroButton5 = new MetroFramework.Controls.MetroButton();
@@ -154,6 +154,7 @@
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.wrongVersionLabel = new MetroFramework.Controls.MetroLabel();
             this.metroTabControl1.SuspendLayout();
             this.serverTab.SuspendLayout();
             this.findingPanel.SuspendLayout();
@@ -171,23 +172,23 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
-            // metroButton1
+            // sendClientDebugFlagsButton
             // 
-            this.metroButton1.Location = new System.Drawing.Point(281, 63);
-            this.metroButton1.Name = "metroButton1";
-            this.metroButton1.Size = new System.Drawing.Size(75, 23);
-            this.metroButton1.TabIndex = 6;
-            this.metroButton1.Text = "Send";
-            this.metroButton1.Click += new System.EventHandler(this.button2_Click);
+            this.sendClientDebugFlagsButton.Location = new System.Drawing.Point(281, 63);
+            this.sendClientDebugFlagsButton.Name = "sendClientDebugFlagsButton";
+            this.sendClientDebugFlagsButton.Size = new System.Drawing.Size(75, 23);
+            this.sendClientDebugFlagsButton.TabIndex = 6;
+            this.sendClientDebugFlagsButton.Text = "Send";
+            this.sendClientDebugFlagsButton.Click += new System.EventHandler(this.sendClientDebugFlagsButton_Click);
             // 
-            // metroButton2
+            // sendDriverTestModeButton
             // 
-            this.metroButton2.Location = new System.Drawing.Point(281, 104);
-            this.metroButton2.Name = "metroButton2";
-            this.metroButton2.Size = new System.Drawing.Size(75, 23);
-            this.metroButton2.TabIndex = 6;
-            this.metroButton2.Text = "Send";
-            this.metroButton2.Click += new System.EventHandler(this.button3_Click);
+            this.sendDriverTestModeButton.Location = new System.Drawing.Point(281, 104);
+            this.sendDriverTestModeButton.Name = "sendDriverTestModeButton";
+            this.sendDriverTestModeButton.Size = new System.Drawing.Size(75, 23);
+            this.sendDriverTestModeButton.TabIndex = 6;
+            this.sendDriverTestModeButton.Text = "Send";
+            this.sendDriverTestModeButton.Click += new System.EventHandler(this.button3_Click);
             // 
             // metroProgressSpinner1
             // 
@@ -240,6 +241,7 @@
             this.findingPanel.Controls.Add(this.noClientLabel);
             this.findingPanel.Controls.Add(this.dataGridView1);
             this.findingPanel.Controls.Add(this.metroProgressSpinner2);
+            this.findingPanel.Controls.Add(this.wrongVersionLabel);
             this.findingPanel.Controls.Add(this.metroLabel4);
             this.findingPanel.HorizontalScrollbarBarColor = true;
             this.findingPanel.HorizontalScrollbarHighlightOnWheel = false;
@@ -388,7 +390,7 @@
             this.autoConnectCheckBox.AutoSize = true;
             this.autoConnectCheckBox.Location = new System.Drawing.Point(73, 204);
             this.autoConnectCheckBox.Name = "autoConnectCheckBox";
-            this.autoConnectCheckBox.Size = new System.Drawing.Size(147, 15);
+            this.autoConnectCheckBox.Size = new System.Drawing.Size(148, 15);
             this.autoConnectCheckBox.TabIndex = 13;
             this.autoConnectCheckBox.Text = "Auto connect next time";
             this.autoConnectCheckBox.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -788,7 +790,7 @@
             // 
             this.metroLabel32.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.metroLabel32.AutoSize = true;
-            this.metroLabel32.Location = new System.Drawing.Point(462, -1437);
+            this.metroLabel32.Location = new System.Drawing.Point(462, -1881);
             this.metroLabel32.Name = "metroLabel32";
             this.metroLabel32.Size = new System.Drawing.Size(162, 38);
             this.metroLabel32.TabIndex = 10;
@@ -798,7 +800,7 @@
             // 
             this.metroLabel22.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.metroLabel22.AutoSize = true;
-            this.metroLabel22.Location = new System.Drawing.Point(216, -1041);
+            this.metroLabel22.Location = new System.Drawing.Point(216, -1485);
             this.metroLabel22.Name = "metroLabel22";
             this.metroLabel22.Size = new System.Drawing.Size(240, 38);
             this.metroLabel22.TabIndex = 10;
@@ -1193,8 +1195,8 @@
             this.debugTab.Controls.Add(this.debugCaptureOutputCheckBox);
             this.debugTab.Controls.Add(this.debugLogCheckBox);
             this.debugTab.Controls.Add(this.metroCheckBox1);
-            this.debugTab.Controls.Add(this.metroTextBox2);
-            this.debugTab.Controls.Add(this.metroTextBox1);
+            this.debugTab.Controls.Add(this.driverTestModeTextBox);
+            this.debugTab.Controls.Add(this.clientDebugFlagsTextBox);
             this.debugTab.Controls.Add(this.metroLabel2);
             this.debugTab.Controls.Add(this.metroLabel1);
             this.debugTab.Controls.Add(this.metroButton5);
@@ -1202,8 +1204,8 @@
             this.debugTab.Controls.Add(this.metroButton4);
             this.debugTab.Controls.Add(this.captureLayerDDSButton);
             this.debugTab.Controls.Add(this.captureComposedDDSButton);
-            this.debugTab.Controls.Add(this.metroButton2);
-            this.debugTab.Controls.Add(this.metroButton1);
+            this.debugTab.Controls.Add(this.sendDriverTestModeButton);
+            this.debugTab.Controls.Add(this.sendClientDebugFlagsButton);
             this.debugTab.HorizontalScrollbarBarColor = true;
             this.debugTab.Location = new System.Drawing.Point(4, 38);
             this.debugTab.Name = "debugTab";
@@ -1237,7 +1239,7 @@
             this.metroCheckBox3.AutoSize = true;
             this.metroCheckBox3.Location = new System.Drawing.Point(281, 209);
             this.metroCheckBox3.Name = "metroCheckBox3";
-            this.metroCheckBox3.Size = new System.Drawing.Size(56, 15);
+            this.metroCheckBox3.Size = new System.Drawing.Size(57, 15);
             this.metroCheckBox3.TabIndex = 9;
             this.metroCheckBox3.Text = "Mutex";
             this.metroCheckBox3.UseVisualStyleBackColor = true;
@@ -1283,26 +1285,26 @@
             this.metroCheckBox1.AutoSize = true;
             this.metroCheckBox1.Location = new System.Drawing.Point(156, 177);
             this.metroCheckBox1.Name = "metroCheckBox1";
-            this.metroCheckBox1.Size = new System.Drawing.Size(119, 15);
+            this.metroCheckBox1.Size = new System.Drawing.Size(120, 15);
             this.metroCheckBox1.TabIndex = 9;
             this.metroCheckBox1.Text = "DebugFrameIndex";
             this.metroCheckBox1.UseVisualStyleBackColor = true;
             // 
-            // metroTextBox2
+            // driverTestModeTextBox
             // 
-            this.metroTextBox2.Location = new System.Drawing.Point(159, 104);
-            this.metroTextBox2.Name = "metroTextBox2";
-            this.metroTextBox2.Size = new System.Drawing.Size(116, 23);
-            this.metroTextBox2.TabIndex = 8;
-            this.metroTextBox2.Text = "0";
+            this.driverTestModeTextBox.Location = new System.Drawing.Point(159, 104);
+            this.driverTestModeTextBox.Name = "driverTestModeTextBox";
+            this.driverTestModeTextBox.Size = new System.Drawing.Size(116, 23);
+            this.driverTestModeTextBox.TabIndex = 8;
+            this.driverTestModeTextBox.Text = "0";
             // 
-            // metroTextBox1
+            // clientDebugFlagsTextBox
             // 
-            this.metroTextBox1.Location = new System.Drawing.Point(159, 62);
-            this.metroTextBox1.Name = "metroTextBox1";
-            this.metroTextBox1.Size = new System.Drawing.Size(116, 23);
-            this.metroTextBox1.TabIndex = 8;
-            this.metroTextBox1.Text = "0";
+            this.clientDebugFlagsTextBox.Location = new System.Drawing.Point(159, 62);
+            this.clientDebugFlagsTextBox.Name = "clientDebugFlagsTextBox";
+            this.clientDebugFlagsTextBox.Size = new System.Drawing.Size(116, 23);
+            this.clientDebugFlagsTextBox.TabIndex = 8;
+            this.clientDebugFlagsTextBox.Text = "0";
             // 
             // metroLabel2
             // 
@@ -1318,9 +1320,9 @@
             this.metroLabel1.AutoSize = true;
             this.metroLabel1.Location = new System.Drawing.Point(1, 67);
             this.metroLabel1.Name = "metroLabel1";
-            this.metroLabel1.Size = new System.Drawing.Size(104, 19);
+            this.metroLabel1.Size = new System.Drawing.Size(111, 19);
             this.metroLabel1.TabIndex = 7;
-            this.metroLabel1.Text = "EnableTestMode";
+            this.metroLabel1.Text = "client debugFlags";
             // 
             // metroButton5
             // 
@@ -1505,6 +1507,21 @@
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
+            // wrongVersionLabel
+            // 
+            this.wrongVersionLabel.BackColor = System.Drawing.Color.White;
+            this.wrongVersionLabel.CustomBackground = true;
+            this.wrongVersionLabel.CustomForeColor = true;
+            this.wrongVersionLabel.FontWeight = MetroFramework.MetroLabelWeight.Regular;
+            this.wrongVersionLabel.ForeColor = System.Drawing.Color.Crimson;
+            this.wrongVersionLabel.Location = new System.Drawing.Point(446, 224);
+            this.wrongVersionLabel.Name = "wrongVersionLabel";
+            this.wrongVersionLabel.Size = new System.Drawing.Size(207, 43);
+            this.wrongVersionLabel.TabIndex = 9;
+            this.wrongVersionLabel.Text = "Found wrong version client.\r\nCheck for client/server update.";
+            this.wrongVersionLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.wrongVersionLabel.Visible = false;
+            // 
             // Launcher
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -1549,14 +1566,14 @@
 
         #endregion
 
-        private MetroFramework.Controls.MetroButton metroButton1;
-        private MetroFramework.Controls.MetroButton metroButton2;
+        private MetroFramework.Controls.MetroButton sendClientDebugFlagsButton;
+        private MetroFramework.Controls.MetroButton sendDriverTestModeButton;
         private MetroFramework.Controls.MetroProgressSpinner metroProgressSpinner1;
         private MetroFramework.Controls.MetroButton captureComposedDDSButton;
         private MetroFramework.Controls.MetroTabControl metroTabControl1;
         private MetroFramework.Controls.MetroTabPage debugTab;
-        private MetroFramework.Controls.MetroTextBox metroTextBox2;
-        private MetroFramework.Controls.MetroTextBox metroTextBox1;
+        private MetroFramework.Controls.MetroTextBox driverTestModeTextBox;
+        private MetroFramework.Controls.MetroTextBox clientDebugFlagsTextBox;
         private MetroFramework.Controls.MetroLabel metroLabel2;
         private MetroFramework.Controls.MetroLabel metroLabel1;
         private MetroFramework.Controls.MetroLabel metroLabel3;
@@ -1666,6 +1683,7 @@
         private MetroFramework.Controls.MetroCheckBox defaultSoundDeviceCheckBox;
         private MetroFramework.Controls.MetroCheckBox force60HzCheckBox;
         private MetroFramework.Controls.MetroLabel resolutionLabel;
+        private MetroFramework.Controls.MetroLabel wrongVersionLabel;
     }
 }
 

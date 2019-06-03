@@ -89,6 +89,8 @@ public:
 				vr::VRDriverInput()->CreateBooleanComponent(m_ulPropertyContainer, "/input/a/touch", &m_handles[ALVR_INPUT_A_TOUCH]);
 				vr::VRDriverInput()->CreateBooleanComponent(m_ulPropertyContainer, "/input/b/click", &m_handles[ALVR_INPUT_B_CLICK]);
 				vr::VRDriverInput()->CreateBooleanComponent(m_ulPropertyContainer, "/input/b/touch", &m_handles[ALVR_INPUT_B_TOUCH]);
+
+				vr::VRDriverInput()->CreateSkeletonComponent(m_ulPropertyContainer, "/input/skeleton/right", "/skeleton/hand/right", "/pose/raw", nullptr, SKELTON_BONE_COUNT, &m_compSkeleton);
 			}
 			else {
 				// X,Y for left hand.
@@ -96,6 +98,8 @@ public:
 				vr::VRDriverInput()->CreateBooleanComponent(m_ulPropertyContainer, "/input/x/touch", &m_handles[ALVR_INPUT_X_TOUCH]);
 				vr::VRDriverInput()->CreateBooleanComponent(m_ulPropertyContainer, "/input/y/click", &m_handles[ALVR_INPUT_Y_CLICK]);
 				vr::VRDriverInput()->CreateBooleanComponent(m_ulPropertyContainer, "/input/y/touch", &m_handles[ALVR_INPUT_Y_TOUCH]);
+
+				vr::VRDriverInput()->CreateSkeletonComponent(m_ulPropertyContainer, "/input/skeleton/left", "/skeleton/hand/left", "/pose/raw", nullptr, SKELTON_BONE_COUNT, &m_compSkeleton);
 			}
 
 			vr::VRDriverInput()->CreateBooleanComponent(m_ulPropertyContainer, "/input/joystick/click", &m_handles[ALVR_INPUT_JOYSTICK_CLICK]);
@@ -221,6 +225,18 @@ public:
 		m_pose.vecPosition[0] = controllerPosition.x;
 		m_pose.vecPosition[1] = controllerPosition.y;
 		m_pose.vecPosition[2] = controllerPosition.z;
+		m_pose.vecVelocity[0] = info.controller[controllerIndex].linearVelocity.x;
+		m_pose.vecVelocity[1] = info.controller[controllerIndex].linearVelocity.y;
+		m_pose.vecVelocity[2] = info.controller[controllerIndex].linearVelocity.z;
+		m_pose.vecAcceleration[0] = info.controller[controllerIndex].linearAcceleration.x;
+		m_pose.vecAcceleration[1] = info.controller[controllerIndex].linearAcceleration.y;
+		m_pose.vecAcceleration[2] = info.controller[controllerIndex].linearAcceleration.z;
+		m_pose.vecAngularVelocity[0] = info.controller[controllerIndex].angularVelocity.x;
+		m_pose.vecAngularVelocity[1] = info.controller[controllerIndex].angularVelocity.y;
+		m_pose.vecAngularVelocity[2] = info.controller[controllerIndex].angularVelocity.z;
+		m_pose.vecAngularAcceleration[0] = info.controller[controllerIndex].angularAcceleration.x;
+		m_pose.vecAngularAcceleration[1] = info.controller[controllerIndex].angularAcceleration.y;
+		m_pose.vecAngularAcceleration[2] = info.controller[controllerIndex].angularAcceleration.z;
 
 		m_pose.poseTimeOffset = 0;
 
@@ -311,6 +327,8 @@ public:
 	}
 
 private:
+	static const int SKELTON_BONE_COUNT = 31;
+
 	vr::TrackedDeviceIndex_t m_unObjectId;
 	vr::PropertyContainerHandle_t m_ulPropertyContainer;
 
@@ -323,6 +341,7 @@ private:
 
 	vr::VRInputComponentHandle_t m_handles[ALVR_INPUT_COUNT];
 	vr::VRInputComponentHandle_t m_compHaptic;
+	vr::VRInputComponentHandle_t m_compSkeleton;
 
 	vr::DriverPose_t m_pose;
 };
